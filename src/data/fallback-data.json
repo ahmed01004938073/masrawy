@@ -1,0 +1,86 @@
+{
+  "employees": [
+    {
+      "id": "emp-1",
+      "name": "أحمد محمد",
+      "email": "admin",
+      "password": "admin123",
+      "phone": "01012345678",
+      "role": "admin",
+      "accessibleSections": [
+        "dashboard",
+        "products",
+        "categories",
+        "orders",
+        "warehouse",
+        "shipping",
+        "delivery",
+        "archive",
+        "marketers",
+        "commissions",
+        "shipping-settings",
+        "reports",
+        "settings",
+        "site-settings"
+      ],
+      "isActive": true,
+      "createdAt": "2025-06-01T19:21:31.116Z"
+    },
+    {
+      "id": "emp-2",
+      "name": "محمد علي",
+      "email": "sales@afleet.com",
+      "password": "sales123",
+      "phone": "01112345678",
+      "role": "sales",
+      "accessibleSections": ["dashboard", "products", "categories", "orders"],
+      "isActive": true,
+      "createdAt": "2025-06-01T19:21:31.117Z"
+    },
+    {
+      "id": "emp-3",
+      "name": "سارة أحمد",
+      "email": "warehouse@afleet.com",
+      "password": "warehouse123",
+      "phone": "01212345678",
+      "role": "warehouse",
+      "accessibleSections": ["dashboard", "warehouse", "products"],
+      "isActive": true,
+      "createdAt": "2025-06-01T19:21:31.117Z"
+    }
+  ],
+  "companySettings": {
+    "companyName": "شركة أفليت للتجارة الإلكترونية",
+    "companyLogo": "/logo.png",
+    "companyPhone": "01XXXXXXXXX",
+    "companyEmail": "info@afleet.com",
+    "companyAddress": "القاهرة، مصر"
+  },
+  "products": [
+    {
+      "id": "1",
+      "name": "قميص أنيق 1",
+      "driveLink": "https://drive.google.com/folder/d/example1",
+      "price": 299,
+      "discount": 10,
+      "commission": 25,
+      "category": "ملابس",
+      "variants": ["أحمر", "أزرق", "أبيض"],
+      "sizes": ["S", "M", "L", "XL"],
+      "stock": 45,
+      "thumbnail": "https://api.dicebear.com/7.x/shapes/svg?seed=product1",
+      "description": "قميص أنيق بتصميم عصري مناسب لجميع المناسبات"
+    }
+  ],
+  "orders": [],
+  "marketers": [],
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "ملابس",
+      "description": "ملابس متنوعة للرجال والنساء",
+      "isActive": true,
+      "createdAt": "2025-06-01T19:21:31.116Z"
+    }
+  ]
+}

@@ -1,0 +1,287 @@
+const express = require('express');
+const cors = require('cors');
+const db = require('./database.cjs');
+const path = require('path');
+
+const app = express();
+const PORT = 3001;
+
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: '50mb' })); // Increased limit for images
+
+// --- API Endpoints ---
+
+// 1. PRODUCTS
+app.get('/api/products', (req, res) => {
+    const sql = "SELECT * FROM products ORDER BY date DESC";
+    db.all(sql, [], (err, rows) => {
+        if (err) return res.status(400).json({ error: err.message });
+        // Parse JSON fields
+        const products = rows.map(p => ({
+            ...p,
+            images: JSON.parse(p.images || '[]'),
+            colors: JSON.parse(p.colors || '[]'),
+            sizes: JSON.parse(p.sizes || '[]'),
+            detailedVariants: JSON.parse(p.detailedVariants || '[]')
+        }));
+        res.json(products);
+    });
+});
+
+app.post('/api/products', (req, res) => {
+    const { id, name, description, price, minSellingPrice, wholesalePrice, quantity, category, images, colors, sizes, detailedVariants, driveLink, date, manufacturerId, isArchived } = req.body;
+    const sql = `INSERT OR REPLACE INTO products (id, name, description, price, minSellingPrice, wholesalePrice, quantity, category, images, colors, sizes, detailedVariants, driveLink, date, manufacturerId, isArchived) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const params = [
+        id, name, description, price, minSellingPrice, wholesalePrice || 0, quantity, category,
+        JSON.stringify(images), JSON.stringify(colors), JSON.stringify(sizes), JSON.stringify(detailedVariants || []),
+        driveLink || "",
+        date, manufacturerId || null, isArchived ? 1 : 0
+    ];
+
+    db.run(sql, params, function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ message: "Product saved", id: this.lastID });
+    });
+});
+
+app.delete('/api/products/:id', (req, res) => {
+    const sql = "DELETE FROM products WHERE id = ?";
+    db.run(sql, req.params.id, function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ message: "Product deleted" });
+    });
+});
+
+
+// 2. ORDERS
+app.get('/api/orders', (req, res) => {
+    const sql = "SELECT * FROM orders ORDER BY createdAt DESC";
+    db.all(sql, [], (err, rows) => {
+        if (err) return res.status(400).json({ error: err.message });
+        const orders = rows.map(o => ({
+            ...o,
+            items: JSON.parse(o.items || '[]')
+        }));
+        res.json(orders);
+    });
+});
+
+app.post('/api/orders', (req, res) => {
+    const order = req.body;
+    const sql = `INSERT OR REPLACE INTO orders (
+    id, orderNumber, customerName, customerPhone, customerPhone2, customerAddress, 
+    province, city, customerNotes, items, status, section, totalAmount, 
+    shippingFee, commission, paymentMethod, paymentStatus, createdAt, updatedAt, marketerId, marketerName, page,
+    shippingCompany, trackingNumber, shippingDate, deliveryNotes, cancellationReason, cancellationDate
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const params = [
+        order.id, order.orderNumber, order.customerName, order.customerPhone, order.customerPhone2, order.customerAddress,
+        order.province, order.city, order.customerNotes, JSON.stringify(order.items), order.status, order.section, order.totalAmount,
+        order.shippingFee, order.commission, order.paymentMethod, order.paymentStatus, order.createdAt, order.updatedAt, order.marketerId, order.marketerName, order.page || null,
+        order.shippingCompany || null, order.trackingNumber || null, order.shippingDate || null, order.deliveryNotes || null,
+        order.cancellationReason || null, order.cancellationDate || null
+    ];
+
+    db.run(sql, params, function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ message: "Order saved", id: order.id });
+    });
+});
+
+app.delete('/api/orders/:id', (req, res) => {
+    const sql = "DELETE FROM orders WHERE id = ?";
+    db.run(sql, req.params.id, function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ message: "Order deleted" });
+    });
+});
+
+// 3. EMPLOYEES
+app.get('/api/employees', (req, res) => {
+    const sql = "SELECT * FROM employees ORDER BY createdAt DESC";
+    db.all(sql, [], (err, rows) => {
+        if (err) return res.status(400).json({ error: err.message });
+        // Parse JSON fields and convert isActive to boolean
+        const employees = rows.map(emp => ({
+            ...emp,
+            accessibleSections: JSON.parse(emp.accessibleSections || '[]'),
+            permissions: emp.permissions ? JSON.parse(emp.permissions) : undefined,
+            isActive: emp.isActive === 1
+        }));
+        res.json(employees);
+    });
+});
+
+app.post('/api/employees', (req, res) => {
+    const emp = req.body;
+    const sql = `INSERT OR REPLACE INTO employees (
+        id, name, email, password, phone, role, accessibleSections, permissions, 
+        isActive, createdAt, updatedAt, lastLogin
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    const params = [
+        emp.id, emp.name, emp.email, emp.password, emp.phone, emp.role,
+        JSON.stringify(emp.accessibleSections), emp.permissions ? JSON.stringify(emp.permissions) : null,
+        emp.isActive ? 1 : 0, emp.createdAt, emp.updatedAt, emp.lastLogin
+    ];
+
+    db.run(sql, params, function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ message: "Employee saved", id: emp.id });
+    });
+});
+
+app.post('/api/login', (req, res) => {
+    const { identifier, password } = req.body;
+
+    // Check by email or name
+    const sql = "SELECT * FROM employees WHERE (email = ? OR name = ?) AND password = ?";
+
+    db.get(sql, [identifier, identifier, password], (err, row) => {
+        if (err) {
+            console.error('Database error:', err.message);
+            return res.status(500).json({ error: err.message });
+        }
+
+        if (!row) {
+            return res.status(401).json({ error: "بيانات غير صحيحة" });
+        }
+
+        if (row.isActive !== 1) {
+            return res.status(403).json({ error: "الحساب غير نشط" });
+        }
+
+        // Generate Session Token
+        const token = require('crypto').randomBytes(32).toString('hex');
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+        const insertSessionSql = "INSERT INTO sessions (token, userId, role, createdAt, expiresAt) VALUES (?, ?, ?, ?, ?)";
+        db.run(insertSessionSql, [token, row.id, row.role, new Date().toISOString(), expiresAt], (err) => {
+            if (err) console.error("Session creation failed:", err);
+        });
+
+        // Update lastLogin
+        const updateSql = "UPDATE employees SET lastLogin = ? WHERE id = ?";
+        db.run(updateSql, [new Date().toISOString(), row.id]);
+
+        // Parse JSON fields before returning
+        const user = {
+            ...row,
+            accessibleSections: JSON.parse(row.accessibleSections || '[]'),
+            permissions: row.permissions ? JSON.parse(row.permissions) : undefined,
+            isActive: true
+        };
+
+        const responseData = {
+            user: user,
+            token: token
+        };
+
+        // Force explicit JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200);
+        res.send(JSON.stringify(responseData));
+    });
+});
+
+app.post('/api/session/validate', (req, res) => {
+    const { token } = req.body;
+    if (!token) return res.status(401).json({ error: "No token" });
+
+    const sql = `SELECT s.*, e.* FROM sessions s 
+                 JOIN employees e ON s.userId = e.id 
+                 WHERE s.token = ?`;
+
+    db.get(sql, [token], (err, row) => {
+        if (err || !row) return res.status(401).json({ error: "Invalid session" });
+
+        // Check expiry (optional, strictly speaking)
+        if (new Date(row.expiresAt) < new Date()) {
+            // Delete expired
+            db.run("DELETE FROM sessions WHERE token = ?", [token]);
+            return res.status(401).json({ error: "Session expired" });
+        }
+
+        const user = {
+            id: row.userId,
+            name: row.name,
+            email: row.email,
+            role: row.role,
+            phone: row.phone,
+            accessibleSections: JSON.parse(row.accessibleSections || '[]'),
+            permissions: row.permissions ? JSON.parse(row.permissions) : undefined,
+            isActive: row.isActive === 1
+        };
+        res.json({ user });
+    });
+});
+
+app.post('/api/logout', (req, res) => {
+    const { token } = req.body;
+    db.run("DELETE FROM sessions WHERE token = ?", [token], (err) => {
+        res.json({ message: "Logged out" });
+    });
+});
+
+// 4. FAVORITES
+app.get('/api/favorites/:userId', (req, res) => {
+    const sql = "SELECT productId FROM favorites WHERE userId = ?";
+    db.all(sql, [req.params.userId], (err, rows) => {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json(rows.map(r => r.productId));
+    });
+});
+
+app.post('/api/favorites', (req, res) => {
+    const { userId, productId } = req.body;
+    // Check if exists
+    db.get("SELECT * FROM favorites WHERE userId = ? AND productId = ?", [userId, productId], (err, row) => {
+        if (err) return res.status(400).json({ error: err.message });
+
+        if (row) {
+            // Remove
+            db.run("DELETE FROM favorites WHERE userId = ? AND productId = ?", [userId, productId], (err) => {
+                if (err) return res.status(400).json({ error: err.message });
+                res.json({ message: "Removed from favorites", status: "removed" });
+            });
+        } else {
+            // Add
+            db.run("INSERT INTO favorites (userId, productId, createdAt) VALUES (?, ?, ?)", [userId, productId, new Date().toISOString()], (err) => {
+                if (err) return res.status(400).json({ error: err.message });
+                res.json({ message: "Added to favorites", status: "added" });
+            });
+        }
+    });
+});
+
+// 5. SETTINGS & OTHERS (Generic Key-Value Store for simplicity)
+app.get('/api/kv/:key', (req, res) => {
+    const sql = "SELECT value FROM kv_store WHERE key = ?";
+    db.get(sql, [req.params.key], (err, row) => {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json(row ? JSON.parse(row.value) : null);
+    });
+});
+
+app.post('/api/kv', (req, res) => {
+    const { key, value } = req.body;
+    const sql = "INSERT OR REPLACE INTO kv_store (key, value) VALUES (?, ?)";
+    db.run(sql, [key, JSON.stringify(value)], function (err) {
+        if (err) return res.status(400).json({ error: err.message });
+        res.json({ message: "Saved" });
+    });
+});
+
+// Default route
+app.get('/', (req, res) => {
+    res.send('Afleet API Server is running');
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    // Keep alive just in case
+    setInterval(() => { }, 10000);
+});

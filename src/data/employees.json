@@ -1,0 +1,184 @@
+[
+  {
+    "id": "emp-1",
+    "name": "أحمد محمد",
+    "email": "admin",
+    "password": "admin123",
+    "phone": "01012345678",
+    "role": "admin",
+    "accessibleSections": [
+      "dashboard",
+      "products",
+      "categories",
+      "orders",
+      "warehouse",
+      "shipping",
+      "delivery",
+      "archive",
+      "marketers",
+      "commissions",
+      "shipping-settings",
+      "reports",
+      "settings",
+      "site-settings"
+    ],
+    "permissions": [
+      {
+        "section": "dashboard",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "orders",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "warehouse",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "shipping",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "delivery",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "collection",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "archive",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "marketers",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "products",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "categories",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "settings",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "employees",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      },
+      {
+        "section": "reports",
+        "actions": ["view", "create", "edit", "delete", "approve", "reject", "export", "import"]
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-06-01T19:21:31.116Z",
+    "lastLogin": "2025-06-02T06:26:21.884Z",
+    "updatedAt": "2025-06-02T17:59:51.223Z"
+  },
+  {
+    "id": "emp-2",
+    "name": "محمد علي",
+    "email": "sales@afleet.com",
+    "password": "sales123",
+    "phone": "01112345678",
+    "role": "sales",
+    "accessibleSections": ["dashboard", "products", "categories", "orders"],
+    "permissions": [
+      {
+        "section": "dashboard",
+        "actions": ["view"]
+      },
+      {
+        "section": "orders",
+        "actions": ["view", "create", "edit", "export"]
+      },
+      {
+        "section": "products",
+        "actions": ["view"]
+      },
+      {
+        "section": "categories",
+        "actions": ["view"]
+      },
+      {
+        "section": "marketers",
+        "actions": ["view"]
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-06-01T19:21:31.117Z"
+  },
+  {
+    "id": "emp-3",
+    "name": "سارة أحمد",
+    "email": "warehouse@afleet.com",
+    "password": "warehouse123",
+    "phone": "01212345678",
+    "role": "warehouse",
+    "accessibleSections": ["dashboard", "warehouse", "products"],
+    "permissions": [
+      {
+        "section": "dashboard",
+        "actions": ["view"]
+      },
+      {
+        "section": "warehouse",
+        "actions": ["view", "edit", "approve", "reject"]
+      },
+      {
+        "section": "products",
+        "actions": ["view", "edit"]
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-06-01T19:21:31.117Z"
+  },
+  {
+    "id": "emp-4",
+    "name": "خالد محمود",
+    "email": "shipping@afleet.com",
+    "password": "shipping123",
+    "phone": "01312345678",
+    "role": "shipping",
+    "accessibleSections": ["dashboard", "shipping", "shipping-settings"],
+    "permissions": [
+      {
+        "section": "dashboard",
+        "actions": ["view"]
+      },
+      {
+        "section": "shipping",
+        "actions": ["view", "edit", "approve", "reject"]
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-06-01T19:21:31.117Z"
+  },
+  {
+    "id": "emp-5",
+    "name": "فاطمة علي",
+    "email": "delivery@afleet.com",
+    "password": "delivery123",
+    "phone": "01412345678",
+    "role": "delivery",
+    "accessibleSections": ["dashboard", "delivery"],
+    "permissions": [
+      {
+        "section": "dashboard",
+        "actions": ["view"]
+      },
+      {
+        "section": "delivery",
+        "actions": ["view", "edit", "approve", "reject"]
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2025-06-01T19:21:31.117Z"
+  }
+]

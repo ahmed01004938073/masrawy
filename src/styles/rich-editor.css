@@ -1,0 +1,335 @@
+/* ستايلات محرر النصوص المتقدم */
+
+/* تخصيص شريط الأدوات */
+.ql-toolbar {
+  border: 2px solid #e2e8f0 !important;
+  border-bottom: none !important;
+  background: #f8fafc !important;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 20px !important;
+  direction: rtl !important;
+  min-height: 120px !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  flex-wrap: wrap !important;
+  display: flex !important;
+}
+
+/* تخصيص منطقة التحرير */
+.ql-container {
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 0 0 12px 12px !important;
+  font-family: 'Cairo', sans-serif !important;
+  direction: rtl !important;
+  text-align: right !important;
+  background: white !important;
+}
+
+.ql-editor {
+  min-height: 400px !important;
+  padding: 24px !important;
+  font-size: 16px !important;
+  line-height: 1.8 !important;
+  direction: rtl !important;
+  text-align: right !important;
+  font-weight: 500 !important;
+}
+
+/* تخصيص الأزرار */
+.ql-toolbar .ql-formats {
+  margin-left: 12px !important;
+  margin-right: 0 !important;
+  margin-bottom: 8px !important;
+  display: inline-flex !important;
+  flex-wrap: wrap !important;
+}
+
+.ql-toolbar button {
+  border-radius: 8px !important;
+  margin: 4px !important;
+  padding: 12px !important;
+  transition: all 0.2s ease !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  font-size: 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ql-toolbar button:hover {
+  background: #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+.ql-toolbar button.ql-active {
+  background: #3b82f6 !important;
+  color: white !important;
+}
+
+/* تخصيص القوائم المنسدلة */
+.ql-toolbar .ql-picker {
+  color: #374151 !important;
+  font-size: 16px !important;
+  display: inline-flex !important;
+  margin: 4px !important;
+}
+
+.ql-toolbar .ql-picker-label {
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  transition: all 0.2s ease !important;
+  min-height: 40px !important;
+  font-size: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+
+.ql-toolbar .ql-picker-label:hover {
+  background: #e2e8f0 !important;
+}
+
+.ql-toolbar .ql-picker-options {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  padding: 8px !important;
+  direction: rtl !important;
+}
+
+.ql-toolbar .ql-picker-item {
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.ql-toolbar .ql-picker-item:hover {
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+}
+
+/* تخصيص أحجام الخطوط */
+.ql-size-small {
+  font-size: 12px !important;
+}
+
+.ql-size-large {
+  font-size: 18px !important;
+}
+
+.ql-size-huge {
+  font-size: 24px !important;
+}
+
+/* تخصيص العناوين */
+.ql-editor h1 {
+  font-size: 2em !important;
+  font-weight: bold !important;
+  margin: 16px 0 !important;
+  color: #1e293b !important;
+}
+
+.ql-editor h2 {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+  margin: 14px 0 !important;
+  color: #374151 !important;
+}
+
+.ql-editor h3 {
+  font-size: 1.25em !important;
+  font-weight: bold !important;
+  margin: 12px 0 !important;
+  color: #4b5563 !important;
+}
+
+/* تخصيص القوائم */
+.ql-editor ul, .ql-editor ol {
+  padding-right: 24px !important;
+  padding-left: 0 !important;
+}
+
+.ql-editor li {
+  margin: 4px 0 !important;
+}
+
+/* تخصيص الروابط */
+.ql-editor a {
+  color: #3b82f6 !important;
+  text-decoration: underline !important;
+}
+
+.ql-editor a:hover {
+  color: #1d4ed8 !important;
+}
+
+/* تخصيص الصور */
+.ql-editor img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 8px !important;
+  margin: 8px 0 !important;
+}
+
+/* تخصيص الجداول */
+.ql-editor table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 16px 0 !important;
+}
+
+.ql-editor table td, .ql-editor table th {
+  border: 1px solid #e2e8f0 !important;
+  padding: 8px 12px !important;
+  text-align: center !important;
+}
+
+.ql-editor table th {
+  background: #f1f5f9 !important;
+  font-weight: bold !important;
+}
+
+/* تخصيص النص المقتبس */
+.ql-editor blockquote {
+  border-right: 4px solid #3b82f6 !important;
+  border-left: none !important;
+  padding-right: 16px !important;
+  padding-left: 0 !important;
+  margin: 16px 0 !important;
+  background: #f8fafc !important;
+  font-style: italic !important;
+}
+
+/* تخصيص الكود */
+.ql-editor code {
+  background: #f1f5f9 !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+  font-family: 'Courier New', monospace !important;
+  color: #dc2626 !important;
+}
+
+/* تخصيص placeholder */
+.ql-editor.ql-blank::before {
+  color: #9ca3af !important;
+  font-style: normal !important;
+  right: 24px !important;
+  left: auto !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+
+/* تخصيص التركيز */
+.ql-container.ql-snow {
+  border-color: #3b82f6 !important;
+}
+
+.ql-toolbar.ql-snow {
+  border-color: #3b82f6 !important;
+}
+
+/* تخصيص الألوان */
+.ql-snow .ql-color .ql-picker-item.ql-selected,
+.ql-snow .ql-background .ql-picker-item.ql-selected {
+  border-color: #3b82f6 !important;
+}
+
+/* تحسينات للجوال */
+@media (max-width: 768px) {
+  .ql-toolbar {
+    padding: 16px !important;
+    min-height: 140px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .ql-toolbar .ql-formats {
+    margin-left: 6px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .ql-toolbar button {
+    padding: 8px !important;
+    margin: 2px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    font-size: 13px !important;
+  }
+
+  .ql-toolbar .ql-picker {
+    margin: 2px !important;
+  }
+
+  .ql-toolbar .ql-picker-label {
+    padding: 8px 10px !important;
+    min-height: 34px !important;
+    font-size: 13px !important;
+  }
+
+  .ql-editor {
+    padding: 18px !important;
+    font-size: 15px !important;
+    min-height: 320px !important;
+  }
+}
+
+/* تخصيص أيقونات الاتجاه */
+.ql-direction .ql-picker-item[data-value="rtl"]::before {
+  content: "→" !important;
+}
+
+.ql-direction .ql-picker-item[data-value="ltr"]::before {
+  content: "←" !important;
+}
+
+/* تخصيص أيقونة المحاذاة */
+.ql-align .ql-picker-item[data-value="right"]::before {
+  content: "⇥" !important;
+}
+
+.ql-align .ql-picker-item[data-value="center"]::before {
+  content: "⇤" !important;
+}
+
+.ql-align .ql-picker-item[data-value="left"]::before {
+  content: "⇤" !important;
+}
+
+/* إصلاح مشكلة الأزرار المخفية */
+.ql-toolbar .ql-formats:last-child {
+  margin-left: 0 !important;
+}
+
+/* ضمان ظهور جميع الأزرار */
+.ql-toolbar {
+  height: auto !important;
+  max-height: none !important;
+}
+
+.ql-toolbar .ql-formats {
+  flex-shrink: 0 !important;
+}
+
+/* تحسين عرض الأزرار الخاصة */
+.ql-toolbar .ql-blockquote,
+.ql-toolbar .ql-code-block,
+.ql-toolbar .ql-link,
+.ql-toolbar .ql-image,
+.ql-toolbar .ql-video,
+.ql-toolbar .ql-clean {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+
+/* تحسين عرض أزرار المحاذاة */
+.ql-toolbar .ql-align .ql-picker-label,
+.ql-toolbar .ql-direction .ql-picker-label {
+  min-width: 50px !important;
+}
+
+/* تحسين عرض أزرار الألوان */
+.ql-toolbar .ql-color .ql-picker-label,
+.ql-toolbar .ql-background .ql-picker-label {
+  min-width: 45px !important;
+}
