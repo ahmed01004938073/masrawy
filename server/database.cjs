@@ -4,21 +4,28 @@ const os = require('os');
 const cpuCount = os.cpus().length;
 
 // Connection Config
-const pool = mysql.createPool({
+const dbConfig = {
     host: process.env.MYSQL_ADDON_HOST || '127.0.0.1',
     user: process.env.MYSQL_ADDON_USER || 'root',
     password: process.env.MYSQL_ADDON_PASSWORD || '',
     database: process.env.MYSQL_ADDON_DB || 'afleet_db',
     port: process.env.MYSQL_ADDON_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 25, // Increased for concurrent users & assets
-    queueLimit: 100, // Fail fast instead of hanging forever
+    connectionLimit: 25,
+    queueLimit: 100,
     connectTimeout: 10000,
     acquireTimeout: 10000,
-    timeout: 30000, // 30s general timeout
+    timeout: 30000,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
-}).promise(); // Explicitly use promise wrapper
+};
+
+console.log(`📡 Attempting to connect to MySQL on ${dbConfig.host}:${dbConfig.port} as ${dbConfig.user}`);
+if (dbConfig.host === '127.0.0.1') {
+    console.warn("⚠️ WARNING: Using fallback 127.0.0.1. Connection to Clever Cloud will FAIL if environment variables are not linked.");
+}
+
+const pool = mysql.createPool(dbConfig).promise();
 
 const sanitizeParams = (params) => {
     if (!params || !Array.isArray(params)) return params || [];
