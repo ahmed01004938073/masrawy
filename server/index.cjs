@@ -1,5 +1,4 @@
-const express = require('express');
-console.log("SERVER VERSION 10003");
+console.log("SERVER VERSION 10005 - STABILITY UPDATE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');

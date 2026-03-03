@@ -11,10 +11,13 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_ADDON_DB || 'afleet_db',
     port: process.env.MYSQL_ADDON_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 10, // Reduced limit for cloud stability
-    queueLimit: 0,
-    connectTimeout: 10000, // 10 seconds timeout
-    acquireTimeout: 10000
+    connectionLimit: 25, // Increased for concurrent users & assets
+    queueLimit: 100, // Fail fast instead of hanging forever
+    connectTimeout: 10000,
+    acquireTimeout: 10000,
+    timeout: 30000, // 30s general timeout
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 }).promise(); // Explicitly use promise wrapper
 
 const sanitizeParams = (params) => {
