@@ -1,10 +1,12 @@
 const express = require('express');
-console.log("SERVER VERSION 10001");
+console.log("SERVER VERSION 10003");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
-const db = require('./database.cjs'); // Keep db initialization
+
+// FORCED LOAD: Ensure database.cjs is loaded
+const db = require('./database.cjs');
 
 // Import Routes
 const productRoutes = require('./routes/productRoutes.cjs');
@@ -46,7 +48,6 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // Health Check
 app.get('/ping', (req, res) => {
     const now = new Date();
-    // Simplified local timestamp: YYYY-MM-DDTHH:mm:ss (no Z, no offset info)
     const localTime = now.getFullYear() + '-' +
         String(now.getMonth() + 1).padStart(2, '0') + '-' +
         String(now.getDate()).padStart(2, '0') + 'T' +
@@ -55,10 +56,10 @@ app.get('/ping', (req, res) => {
         String(now.getSeconds()).padStart(2, '0');
 
     res.json({
-        status: 'server-updated-v2',
+        status: 'server-updated-v3-mysql',
         timestamp: now.toISOString(),
         serverLocalTime: localTime,
-        db: 'connected'
+        db: 'mysql-connected'
     });
 });
 
@@ -87,7 +88,19 @@ app.use((req, res, next) => {
         return res.status(404).json({ error: 'API Endpoint Not Found' });
     }
     if (req.method === 'GET') {
-        return res.sendFile(path.join(__dirname, '../dist/index.html'));
+        const indexPath = path.join(__dirname, '../dist/index.html');
+        if (require('fs').existsSync(indexPath)) {
+            return res.sendFile(indexPath);
+        } else {
+            console.error('Frontend build missing at:', indexPath);
+            return res.status(500).send(`
+                <div style="font-family: sans-serif; text-align: center; padding: 50px;">
+                    <h1 style="color: #e11d48;">Frontend Build Missing</h1>
+                    <p>The system could not find the built frontend assets.</p>
+                    <code style="background: #f1f5f9; padding: 10px; display: block;">${indexPath}</code>
+                </div>
+            `);
+        }
     }
     next();
 });
@@ -103,7 +116,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - RESTART SUCCESSFUL - VERS 10002`;
+    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - RESTART SUCCESSFUL - VERS 10003 - MYSQL ACTIVE`;
     console.log(startupMsg);
     require('fs').appendFileSync('backend_status.log', startupMsg + '\n');
     // Keep alive
