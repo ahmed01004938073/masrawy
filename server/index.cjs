@@ -116,9 +116,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - RESTART SUCCESSFUL - VERS 10003 - MYSQL ACTIVE`;
+    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - VERS 10004 - DIAGNOSTICS ACTIVE`;
     console.log(startupMsg);
-    require('fs').appendFileSync('backend_status.log', startupMsg + '\n');
-    // Keep alive
-    setInterval(() => { }, 10000);
 });
