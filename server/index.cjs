@@ -1,5 +1,5 @@
 const express = require('express');
-console.log("SERVER VERSION 10009 - CLEAN PRODUCTION ACTIVE");
+console.log("SERVER VERSION 10010 - REAL DB PING ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Health Check
-app.get('/ping', (req, res) => {
+app.get('/ping', async (req, res) => {
     const now = new Date();
     const localTime = now.getFullYear() + '-' +
         String(now.getMonth() + 1).padStart(2, '0') + '-' +
@@ -55,11 +55,20 @@ app.get('/ping', (req, res) => {
         String(now.getMinutes()).padStart(2, '0') + ':' +
         String(now.getSeconds()).padStart(2, '0');
 
+    let dbStatus = 'testing...';
+    try {
+        const result = await db.getAsync('SELECT 1 as connected');
+        dbStatus = result && result.connected === 1 ? 'mysql-connected-live' : 'mysql-query-failed';
+    } catch (err) {
+        dbStatus = `mysql-error: ${err.message}`;
+    }
+
     res.json({
-        status: 'server-updated-v3-mysql',
+        status: 'server-stable-v10010',
         timestamp: now.toISOString(),
         serverLocalTime: localTime,
-        db: 'mysql-connected'
+        db: dbStatus,
+        version: 10010
     });
 });
 
