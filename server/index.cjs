@@ -1,5 +1,5 @@
 const express = require('express');
-console.log("SERVER VERSION 10012 - COLUMN DIAG ACTIVE");
+console.log("SERVER VERSION 10013 - ROBUST SETTINGS ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');

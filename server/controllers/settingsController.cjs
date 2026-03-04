@@ -23,8 +23,19 @@ const getSetting = (req, res) => {
 
     const sql = "SELECT value FROM kv_store WHERE `key` = ?";
     db.get(sql, [key], (err, row) => {
-        if (err) return res.status(400).json({ error: err.message });
-        res.json(row ? JSON.parse(row.value) : null);
+        if (err) {
+            console.error(`[GET SETTING ERROR] Key=${key}:`, err.message);
+            return res.status(400).json({ error: "Database error", details: err.message });
+        }
+
+        if (!row) return res.json(null);
+
+        try {
+            res.json(JSON.parse(row.value));
+        } catch (parseErr) {
+            console.error(`[GET SETTING PARSE ERROR] Key=${key}:`, parseErr.message, "Value:", row.value);
+            res.status(400).json({ error: "Invalid JSON format in database", key });
+        }
     });
 };
 
