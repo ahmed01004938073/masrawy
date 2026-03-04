@@ -1,5 +1,5 @@
 const express = require('express');
-console.log("SERVER VERSION 10006 - CRITICAL FIX ACTIVE");
+console.log("SERVER VERSION 10008 - DB DIAGNOSTICS ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');

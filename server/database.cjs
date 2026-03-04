@@ -4,6 +4,10 @@ const os = require('os');
 const cpuCount = os.cpus().length;
 
 // Connection Config
+console.log(`DB Environment Diagnostic:`);
+const mysqlEnvKeys = Object.keys(process.env).filter(key => key.includes('MYSQL'));
+console.log(`- Found ${mysqlEnvKeys.length} MYSQL keys: ${mysqlEnvKeys.join(', ')}`);
+
 const dbConfig = {
     host: process.env.MYSQL_ADDON_HOST || '127.0.0.1',
     user: process.env.MYSQL_ADDON_USER || 'root',
@@ -11,18 +15,18 @@ const dbConfig = {
     database: process.env.MYSQL_ADDON_DB || 'afleet_db',
     port: process.env.MYSQL_ADDON_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 25,
-    queueLimit: 100,
-    connectTimeout: 10000,
-    acquireTimeout: 10000,
-    timeout: 30000,
+    connectionLimit: 30, // Optimized for masrawy deployment
+    queueLimit: 150,
+    connectTimeout: 15000,
+    acquireTimeout: 15000,
+    timeout: 45000,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
 };
 
-console.log(`📡 Attempting to connect to MySQL on ${dbConfig.host}:${dbConfig.port} as ${dbConfig.user}`);
+console.log(`📡 DB_ATTEMPT: host=${dbConfig.host}, port=${dbConfig.port}, user=${dbConfig.user}, db=${dbConfig.database}`);
 if (dbConfig.host === '127.0.0.1') {
-    console.warn("⚠️ WARNING: Using fallback 127.0.0.1. Connection to Clever Cloud will FAIL if environment variables are not linked.");
+    console.warn("❌ CRITICAL: MYSQL_ADDON_HOST is missing! The application is NOT receiving Clever Cloud variables.");
 }
 
 const pool = mysql.createPool(dbConfig).promise();
