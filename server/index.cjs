@@ -1,5 +1,5 @@
 const express = require('express');
-console.log("SERVER VERSION 10008 - DB DIAGNOSTICS ACTIVE");
+console.log("SERVER VERSION 10009 - CLEAN PRODUCTION ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');
@@ -116,6 +116,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - VERS 10004 - DIAGNOSTICS ACTIVE`;
+    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - VERS 10009 - STABLE`;
     console.log(startupMsg);
 });
