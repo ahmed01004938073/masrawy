@@ -1,5 +1,5 @@
 const express = require('express');
-console.log("SERVER VERSION 10010 - REAL DB PING ACTIVE");
+console.log("SERVER VERSION 10011 - TABLE DIAG ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');
@@ -56,19 +56,24 @@ app.get('/ping', async (req, res) => {
         String(now.getSeconds()).padStart(2, '0');
 
     let dbStatus = 'testing...';
+    let tables = [];
     try {
         const result = await db.getAsync('SELECT 1 as connected');
         dbStatus = result && result.connected === 1 ? 'mysql-connected-live' : 'mysql-query-failed';
+
+        const tableRows = await db.allAsync('SHOW TABLES');
+        tables = tableRows.map(r => Object.values(r)[0]);
     } catch (err) {
         dbStatus = `mysql-error: ${err.message}`;
     }
 
     res.json({
-        status: 'server-stable-v10010',
+        status: 'server-stable-v10011',
         timestamp: now.toISOString(),
         serverLocalTime: localTime,
         db: dbStatus,
-        version: 10010
+        tables: tables,
+        version: 10011
     });
 });
 
