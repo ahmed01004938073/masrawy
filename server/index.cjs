@@ -1,5 +1,5 @@
 const express = require('express');
-console.log("SERVER VERSION 10011 - TABLE DIAG ACTIVE");
+console.log("SERVER VERSION 10012 - COLUMN DIAG ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');
@@ -63,17 +63,21 @@ app.get('/ping', async (req, res) => {
 
         const tableRows = await db.allAsync('SHOW TABLES');
         tables = tableRows.map(r => Object.values(r)[0]);
+
+        const columnRows = await db.allAsync('DESCRIBE kv_store');
+        kv_columns = columnRows.map(c => ({ name: c.Field, type: c.Type }));
     } catch (err) {
         dbStatus = `mysql-error: ${err.message}`;
     }
 
     res.json({
-        status: 'server-stable-v10011',
+        status: 'server-stable-v10012',
         timestamp: now.toISOString(),
         serverLocalTime: localTime,
         db: dbStatus,
         tables: tables,
-        version: 10011
+        kv_columns: kv_columns,
+        version: 10012
     });
 });
 
