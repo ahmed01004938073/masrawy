@@ -36,7 +36,7 @@ const sanitizeParams = (params) => {
     return params.map(p => p === undefined ? null : p);
 };
 
-// Adapter to mimic SQLite3 API using Promise pool
+// MySQL Connection Adapter
 const db = {
     // Mimic db.run(sql, params, callback)
     run: function (sql, params, callback) {
@@ -133,11 +133,19 @@ const db = {
     pool: pool
 };
 
-// Initialize Schema
-function initializeSchema() {
-    console.log("✅ Promise-based MySQL Adapter Loaded. Connected to 'afleet_db'.");
+// Initialize Schema/Status check
+async function checkDatabase() {
+    console.log("⏳ DB: Testing connection to main pool...");
+    try {
+        const rows = await db.allAsync('SHOW TABLES');
+        console.log(`✅ DB: Connection Successful. Found ${rows.length} tables.`);
+    } catch (err) {
+        console.error(`❌ DB: Connection Failed - ${err.message}`);
+        console.error("   - Tip: Check Clever Cloud environment variables and Firewall.");
+    }
 }
 
-initializeSchema();
+
+checkDatabase();
 
 module.exports = db;

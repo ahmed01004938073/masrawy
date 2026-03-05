@@ -1,12 +1,21 @@
+try {
+    require('dotenv').config();
+    console.log("✅ Load: .env file processed");
+} catch (err) {
+    console.log("⚠️ Info: No .env file or dotenv library found (Expected in production)");
+}
+
 const express = require('express');
-console.log("SERVER VERSION 10013 - ROBUST SETTINGS ACTIVE");
+console.log("🚀 STARTUP: SERVER VERSION 10014 - ROBUST STARTUP ACTIVE");
 const cors = require('cors');
 const path = require('path');
 const compression = require('compression');
 const helmet = require('helmet');
 
 // FORCED LOAD: Ensure database.cjs is loaded
+console.log("📡 DB: Initializing connection...");
 const db = require('./database.cjs');
+
 
 // Import Routes
 const productRoutes = require('./routes/productRoutes.cjs');
@@ -23,7 +32,12 @@ const analyticsRoutes = require('./routes/analyticsRoutes.cjs');
 const notificationRoutes = require('./routes/notificationRoutes.cjs');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || process.env.CC_PORT || 8080;
+
+// EMERGENCY HEALTH CHECK: Responds instantly without DB or middleware
+app.get('/health', (req, res) => {
+    res.status(200).send('SERVER_ALIVE: ' + new Date().toISOString() + ' on port ' + PORT);
+});
 
 // Middleware
 app.use(helmet({
@@ -134,6 +148,9 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    const startupMsg = `[${new Date().toISOString()}] Server running on port ${PORT} (0.0.0.0) - VERS 10009 - STABLE`;
+    const startupMsg = `🚀 [${new Date().toISOString()}] SERVER STARTUP SUCCESSFUL\n` +
+        `   - Port: ${PORT}\n` +
+        `   - Node Env: ${process.env.NODE_ENV || 'development'}\n` +
+        `   - Version: 10015 - ROBUST_504_DIAGNOSTIC`;
     console.log(startupMsg);
 });
