@@ -15,7 +15,7 @@ const dbConfig = {
     database: process.env.MYSQL_ADDON_DB,
     port: process.env.MYSQL_ADDON_PORT || 3306,
     waitForConnections: true,
-    connectionLimit: 30, // Optimized for masrawy deployment
+    connectionLimit: 3, // Limited to 3 to stay under Clever Cloud's 5-connection limit
     queueLimit: 150,
     connectTimeout: 15000,
     acquireTimeout: 15000,
